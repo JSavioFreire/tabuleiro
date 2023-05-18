@@ -1,14 +1,26 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:tabuleiro/db/sql_db.dart';
+import 'package:tabuleiro/provider/home/home_provider.dart';
 
 class AuthProvider extends ChangeNotifier {
+  BuildContext context;
+  AuthProvider({required this.context}) {
+    getToken();
+  }
+
+  late HomeProvider homeProvider =
+      Provider.of<HomeProvider>(context, listen: false);
+
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   String? responses;
+  bool isLoadingAuth = true;
+  final dbHelper = DatabaseHelper();
 
   final RoundedLoadingButtonController btnController =
       RoundedLoadingButtonController();
@@ -30,7 +42,26 @@ class AuthProvider extends ChangeNotifier {
     btnController.error();
   }
 
-  Future<bool> login({required String email, required String password}) async {
+  logout() async {
+    await dbHelper.deleteToken();
+    responses = null;
+    notifyListeners();
+  }
+
+  getToken() async {
+    final token = await dbHelper.getToken();
+    responses = token;
+    if (responses != null) {
+      homeProvider.infoDb(token: responses.toString());
+    }
+    isLoadingAuth = false;
+    notifyListeners();
+  }
+
+  Future<bool> login(
+      {required String email,
+      required String password,
+      required context}) async {
     const url = 'http://206.189.206.44:8080/login';
     final body = json.encode({'email': email, 'senha': password});
 
@@ -39,23 +70,20 @@ class AuthProvider extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         btnController.success();
-        responses = response.body;
+        await dbHelper.saveToken(response.body.toString());
+        getToken();
         notifyListeners();
-        // Lógica para lidar com a resposta do servidor em caso de login bem-sucedido
         return true;
       } else {
         btnController.error();
-        print('senha e email errado');
-
-        // Lógica para lidar com a resposta do servidor em caso de login mal-sucedido
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Email ou senha incorreto!')));
         return false;
       }
     } catch (e) {
       btnController.error();
-
-      print('erro de servidor');
-
-      // Lógica para lidar com erros de conexão ou outras exceções
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Erro de conexão!')));
       return false;
     }
   }

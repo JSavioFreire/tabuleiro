@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
-import 'package:tabuleiro/provider/auth_provider.dart';
+import 'package:tabuleiro/provider/auth/auth_provider.dart';
 
 class BtnAuth extends StatelessWidget {
   final GlobalKey<FormState> formKey;
@@ -15,12 +15,14 @@ class BtnAuth extends StatelessWidget {
       child: SizedBox(
           width: MediaQuery.of(context).size.width,
           child: RoundedLoadingButton(
+              color: Colors.black54,
               controller: authProvider.btnController,
               onPressed: () {
                 authProvider.resetBtn();
                 if (formKey.currentState!.validate()) {
                   authProvider.login(
                       email: authProvider.emailController.text,
+                      context: context,
                       password: authProvider.passwordController.text);
                 } else {
                   authProvider.errorBtn();

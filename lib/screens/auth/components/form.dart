@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tabuleiro/global/widgets/my_textformfield.dart';
-import 'package:tabuleiro/provider/auth_provider.dart';
+import 'package:tabuleiro/provider/auth/auth_provider.dart';
 
 class FormAuth extends StatelessWidget {
   const FormAuth({super.key});
