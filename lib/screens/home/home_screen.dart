@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +24,17 @@ class HomeScreen extends StatelessWidget {
           actions: [
             IconButton(
                 onPressed: () {
-                  authProvider.logout();
+                  AwesomeDialog(
+                    context: context,
+                    animType: AnimType.scale,
+                    dialogType: DialogType.question,
+                    headerAnimationLoop: false,
+                    title: 'Tem certeza que deseja sair?',
+                    btnCancelOnPress: () {},
+                    btnOkOnPress: () {
+                      authProvider.logout();
+                    },
+                  ).show();
                 },
                 icon: const Icon(Icons.logout))
           ],
@@ -43,9 +54,9 @@ class HomeScreen extends StatelessWidget {
                                 child: ElevatedButton(
                                     onPressed: () {
                                       homeProvider.infoDb(
-                                          token: authProvider.responses
-                                              .toString(),
-                                              context: context);
+                                          token:
+                                              authProvider.responses.toString(),
+                                          context: context);
                                     },
                                     child: const Text(
                                       'Mostrar mais',
