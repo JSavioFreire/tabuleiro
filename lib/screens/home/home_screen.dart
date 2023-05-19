@@ -34,9 +34,24 @@ class HomeScreen extends StatelessWidget {
                 ? Center(child: LottieBuilder.asset('assets/loading.json'))
                 : Expanded(
                     child: ListView.builder(
-                        itemCount: homeProvider.gameModel!.content!.length,
-                        itemBuilder: (context, index) => MyListTile(
-                            eachGame: homeProvider.gameModel!.content![index])))
+                        itemCount: homeProvider.all.length + 1,
+                        itemBuilder: (context, index) => index ==
+                                homeProvider.all.length
+                            ? Padding(
+                                padding: const EdgeInsets.only(
+                                    bottom: 20, right: 15, left: 15),
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                      homeProvider.infoDb(
+                                          token: authProvider.responses
+                                              .toString());
+                                    },
+                                    child: const Text(
+                                      'Mostrar mais',
+                                      style: TextStyle(color: Colors.white),
+                                    )),
+                              )
+                            : MyListTile(eachGame: homeProvider.all[index])))
           ],
         ));
   }

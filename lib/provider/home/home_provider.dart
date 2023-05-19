@@ -9,9 +9,13 @@ class HomeProvider extends ChangeNotifier {
 
   GameModel? gameModel;
   bool isLoadingInfos = true;
+  List<Content> all = [];
+  int page = 0;
 
   Future<bool> infoDb({required String token}) async {
-    const url = 'http://206.189.206.44:8080/api/jogo?page=1';
+    page++;
+    String url = 'http://206.189.206.44:8080/api/jogo?page=$page';
+
     final headers = {
       'Authorization': token,
     };
@@ -22,6 +26,7 @@ class HomeProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         Map<String, dynamic> data = jsonDecode(response.body);
         gameModel = GameModel.fromJson(data);
+        all.addAll(gameModel!.content!);
 
         isLoadingInfos = false;
 

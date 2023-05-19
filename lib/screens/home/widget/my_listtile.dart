@@ -21,10 +21,15 @@ class MyListTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  eachGame.nome.toString(),
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  child: Text(
+                    eachGame.nome.toString(),
+                    style: const TextStyle(
+                        overflow: TextOverflow.clip,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
                 Text(eachGame.ano.toString())
               ],
