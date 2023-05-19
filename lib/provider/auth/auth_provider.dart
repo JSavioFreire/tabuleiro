@@ -10,7 +10,7 @@ import 'package:tabuleiro/provider/home/home_provider.dart';
 class AuthProvider extends ChangeNotifier {
   BuildContext context;
   AuthProvider({required this.context}) {
-    getToken();
+    getToken(context: context);
   }
 
   late HomeProvider homeProvider =
@@ -48,11 +48,11 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  getToken() async {
+  getToken({required context}) async {
     final token = await dbHelper.getToken();
     responses = token;
     if (responses != null) {
-      homeProvider.infoDb(token: responses.toString());
+      homeProvider.infoDb(token: responses.toString(), context: context);
     }
     isLoadingAuth = false;
     notifyListeners();
@@ -71,7 +71,7 @@ class AuthProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         btnController.success();
         await dbHelper.saveToken(response.body.toString());
-        getToken();
+        getToken(context: context);
         notifyListeners();
         return true;
       } else {

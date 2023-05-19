@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:tabuleiro/db/sql_db.dart';
 import 'package:http/http.dart' as http;
@@ -12,7 +13,7 @@ class HomeProvider extends ChangeNotifier {
   List<Content> all = [];
   int page = 0;
 
-  Future<bool> infoDb({required String token}) async {
+  Future<bool> infoDb({required String token, required context}) async {
     page++;
     String url = 'http://206.189.206.44:8080/api/jogo?page=$page';
 
@@ -33,11 +34,33 @@ class HomeProvider extends ChangeNotifier {
         notifyListeners();
         return true;
       } else {
-        print('Erro de conexão');
+        AwesomeDialog(
+          context: context,
+          animType: AnimType.scale,
+          dialogType: DialogType.error,
+          body: const Center(
+            child: Text(
+              'Ocorreu um erro. Tente novamente mais tarde!',
+              style: TextStyle(fontStyle: FontStyle.italic),
+            ),
+          ),
+          btnOkOnPress: () {},
+        ).show();
         return false;
       }
     } catch (e) {
-      print('Erro no banco de dados');
+      AwesomeDialog(
+        context: context,
+        animType: AnimType.scale,
+        dialogType: DialogType.error,
+        body: const Center(
+          child: Text(
+            'Ocorreu um erro. Tente novamente mais tarde!',
+            style: TextStyle(fontStyle: FontStyle.italic),
+          ),
+        ),
+        btnOkOnPress: () {},
+      ).show();
       return false;
     }
   }
