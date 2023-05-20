@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:tabuleiro/global/widgets/my_scaffold.dart';
 import 'package:tabuleiro/provider/auth/auth_provider.dart';
 import 'package:tabuleiro/provider/home/home_provider.dart';
-import 'package:tabuleiro/screens/auth/auth_screen.dart';
 import 'package:tabuleiro/screens/each_game/components/box_info.dart';
 import 'package:tabuleiro/screens/each_game/widgets/row_icon_text.dart';
 import 'package:tabuleiro/screens/loading/loading_screen.dart';
